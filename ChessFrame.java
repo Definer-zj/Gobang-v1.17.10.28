@@ -26,7 +26,7 @@ class ChessFrame extends JFrame implements ActionListener{
 	 * 构造五子棋游戏的主窗体
 	 */
 	public ChessFrame(){
-		this.setTitle("五子棋游戏 v1.17.10.28");
+		this.setTitle("五子棋游戏 v1.17.10.30");
 		cm = new ChessModel(1);
 		mp = new MainPanel(cm);
 		Container con = this.getContentPane();
@@ -42,6 +42,9 @@ class ChessFrame extends JFrame implements ActionListener{
 		JMenu modeMenu = new JMenu("模式");
 		mbar.add(makeMenu(modeMenu,new Object[]{"人机对战",null,
 				"人人对战"},this));
+		JMenu hardMenu = new JMenu("难度");
+		mbar.add(makeMenu(hardMenu,new Object[]{"入门",null,
+				"一般"},this));
 		JMenu sizeMenu = new JMenu("棋盘");
 		mbar.add(makeMenu(sizeMenu,new Object[]{"标准棋盘",null,
 				"扩大棋盘"},this));
@@ -138,6 +141,12 @@ class ChessFrame extends JFrame implements ActionListener{
 			}
 			SwingUtilities.updateComponentTreeUI(this);
 		}catch(Exception ee){ }
+		if(arg.equals("入门")){
+			cm.sethardNum(1);
+		}
+		if(arg.equals("一般")){
+			cm.sethardNum(2);
+		}
 		if(arg.equals("标准棋盘")){
 			this.width=14;
 			this.height=14;
