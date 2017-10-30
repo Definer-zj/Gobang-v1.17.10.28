@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
 import javax.swing.JPanel;
 
 class MainPanel extends JPanel
@@ -83,9 +84,14 @@ class MainPanel extends JPanel
 					evt.consume();
 					ChessFrame.isComputer=false;
 				}
+				
 				//判断是否为人机对弈
 				if(ChessFrame.isComputer&&!cm.getisExist()){
-					cm.computerDo(cm.getWidth(), cm.getHeight());
+					if(cm.getHardNum()==2){
+						cm.computerDoB(cm.getWidth(), cm.getHeight());
+					}else{
+						cm.computerDoA(x,y);
+					}
 					repaint();
 					if(cm.judgeSuccess(cm.getX(), cm.getY(), cm.getisOdd())){
 						cm.showDefeat(this);
