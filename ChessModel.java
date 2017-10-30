@@ -9,7 +9,7 @@ class ChessModel {
 	/*
 	 * 规定棋盘的宽度、高度、棋盘的模式
 	 */
-	private int width,height,modeChess;
+	private int width,height,modeChess,hardNum;
 	/*
 	 * 规定棋盘方格的横向、纵向坐标
 	 */
@@ -61,6 +61,12 @@ class ChessModel {
 		return this.isOdd;
 	}
 	/*
+	 * 设置难度系数
+	 */
+	public void sethardNum(int hardNum){
+		this.hardNum=hardNum;
+	}
+	/*
 	 * 设置交换棋手的标识符
 	 */
 	public void setisOdd(boolean isOdd){
@@ -96,6 +102,12 @@ class ChessModel {
 		return this.modeChess;
 	}
 	/*
+	 * 获取难度系数
+	 */
+	public int getHardNum() {
+		return this.hardNum;
+	}
+	/*
 	 * 获取棋盘方格上棋子的信息
 	 */
 	public int[][] getarrMapShow() {
@@ -105,9 +117,9 @@ class ChessModel {
 	 * 判断下子的横向、纵向坐标是否越界
 	 */
 	private boolean badxy(int x,int y) {
-		if(x>=width+20||x<0 )
+		if(x>width||x<0 )
 			return true;
-		return y>=height+20||y<0;
+		return y>height||y<0;
 	}	
 	/*
 	 * 计算棋盘上某一方格上八个方向棋子的最大值
@@ -152,12 +164,46 @@ class ChessModel {
 			this.arrMapShow[x][y]=2;
 		}
 	}
+	
+	
 	/*
-	 * 计算机走棋
+	 * 计算机走棋（难度* 防御型 入门）
+	 * 说明：当玩家在棋盘上下了一个棋子，机器就判断棋子在棋盘上的位置，随后就在统计左、右、上、下、左上、左下、右上、右下
+	 * 这八个方向与这个棋子相邻且同色的棋子个数，找出棋子个数最多的方向，然后下子
+	 */
+	public void computerDoA(int x,int y) {
+		int max_black,max=0,xx=0,yy=0;
+		setisOdd(true);
+		//System.out.println("计算机走棋......");
+		for(int i=x-1;i<=x+1;i++){
+			for(int j=y-1;j<=y+1;j++){
+				/*算法判断是否下子 */
+				if(!badxy(i, j)){
+					if(!chessExist(i, j)){
+						
+						//判断黑子的最大值
+						max_black=checkMax(i,j,1);
+						
+						if(max_black>max){
+							max=max_black;
+							xx=i;
+							yy=j;
+						}
+					}
+				}
+			}
+		}
+		setX(xx);
+		setY(yy);
+		this.arrMapShow[xx][yy]=2;
+	}
+	
+	/*
+	 * 计算机走棋（难度** 攻防型 一般）
 	 * 说明：用穷举法判断每一个坐标点的四个方向的最大棋子数
 	 * 最后得出棋子数最大值的坐标，然后下子
 	 */
-	public void computerDo(int width,int height) {
+	public void computerDoB(int width,int height) {
 		int max_black,max_white,max_temp,max=0,xx=0,yy=0;
 		setisOdd(true);
 		//System.out.println("计算机走棋......");
